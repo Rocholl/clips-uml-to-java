@@ -22,9 +22,6 @@ COPY pyproject.toml ./
 # Instalar dependencias de Node.js
 RUN npm install
 
-# Instalar Motia CLI globalmente
-RUN npm install -g @motia/cli
-
 # Instalar dependencias de Python (si hay alguna)
 RUN pip install --no-cache-dir -r requirements.txt || true
 
@@ -34,5 +31,7 @@ COPY src/ ./src/
 # Exponer puerto
 EXPOSE 8080
 
-# Comando por defecto (desarrollo)
-CMD ["npm", "run", "dev"]
+# Nota: Motia CLI debe instalarse manualmente o desde su fuente oficial
+# Por ahora, ejecutamos un servidor Python simple como placeholder
+# Reemplaza esto con el comando correcto de Motia cuando esté disponible
+CMD ["python", "-m", "http.server", "8080"]
