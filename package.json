@@ -1,0 +1,46 @@
+{
+  "name": "clips-modelos",
+  "version": "1.0.0",
+  "description": "Template completo con Motia (Python) como backend y Svelte como frontend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "motia dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:frontend\"",
+    "build": "motia build",
+    "build:frontend": "cd frontend && npm run build",
+    "build:all": "npm run build && npm run build:frontend",
+    "start": "motia start",
+    "start:frontend": "cd frontend && npm run preview",
+    "install:all": "npm install && cd frontend && npm install",
+    "clean": "rm -rf dist .motia frontend/dist frontend/.vite",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md,html,svelte}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md,html,svelte}\"",
+    "lint:python": "flake8 src/ && black --check src/",
+    "lint:python:fix": "black src/",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "motia",
+    "template",
+    "python",
+    "svelte",
+    "vite",
+    "backend",
+    "frontend",
+    "fullstack"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@motia/core": "^latest"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

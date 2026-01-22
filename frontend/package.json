@@ -1,0 +1,22 @@
+{
+  "name": "text-processor-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,html,svelte}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,html,svelte}\"",
+    "lint": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,html,svelte}\""
+  },
+  "dependencies": {
+    "svelte": "^4.2.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "vite": "^5.0.0",
+    "prettier": "^3.1.0",
+    "prettier-plugin-svelte": "^3.1.0"
+  }
+}

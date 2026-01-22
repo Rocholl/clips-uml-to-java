@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.motia/
+*.py
+*.pyc
+__pycache__/
+.python-version

@@ -1,0 +1,17 @@
+# Dockerfile para Frontend Svelte - Desarrollo
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copiar archivos de configuración
+COPY package.json package-lock.json* ./
+
+# Instalar dependencias
+RUN npm install
+
+# Copiar código fuente
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

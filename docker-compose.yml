@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # Backend - Motia API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: motia-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - node_modules:/app/node_modules
+    environment:
+      - MOTIA_PORT=8080
+      - MOTIA_ENV=development
+      - NODE_ENV=development
+    networks:
+      - motia-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/example"] || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend - Svelte
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: motia-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/vite.config.js:/app/vite.config.js
+      - ./frontend/svelte.config.js:/app/svelte.config.js
+      - ./frontend/package.json:/app/package.json
+      - frontend_node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://backend:8080
+    networks:
+      - motia-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  node_modules:
+  frontend_node_modules:
+
+networks:
+  motia-network:
+    driver: bridge

@@ -1,0 +1,3 @@
+# Motia Python dependencies
+# Motia maneja las dependencias automáticamente, pero puedes añadir aquí
+# cualquier biblioteca adicional que necesites

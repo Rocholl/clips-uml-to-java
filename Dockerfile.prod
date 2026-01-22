@@ -1,0 +1,56 @@
+# Dockerfile para Backend Motia (Python) - Producción
+FROM python:3.11-slim as builder
+
+# Instalar Node.js
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copiar y instalar dependencias
+COPY package.json package-lock.json* ./
+RUN npm ci --only=production
+
+# Instalar Motia CLI
+RUN npm install -g @motia/cli
+
+# Instalar dependencias Python
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt || true
+
+# Copiar código y construir
+COPY src/ ./src/
+RUN motia build
+
+# Imagen final más pequeña
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copiar solo lo necesario
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /usr/local/lib/node_modules/@motia ./node_modules/@motia
+COPY package.json ./
+
+# Instalar Motia CLI
+RUN npm install -g @motia/cli
+
+EXPOSE 8080
+
+CMD ["motia", "start"]
