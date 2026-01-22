@@ -32,6 +32,6 @@ COPY src/ ./src/
 EXPOSE 8080
 
 # Nota: Motia CLI debe instalarse manualmente o desde su fuente oficial
-# Por ahora, ejecutamos un servidor Python simple como placeholder
+# Por ahora, ejecutamos un servidor Python simple con CORS como placeholder
 # Reemplaza esto con el comando correcto de Motia cuando esté disponible
-CMD ["python", "-m", "http.server", "8080"]
+CMD ["python", "src/server.py"]

@@ -4,6 +4,16 @@
   let loading = false;
   let error = null;
 
+  // URL del backend - siempre apunta al puerto 8080
+  // IMPORTANTE: Desde el navegador siempre usa localhost:8080
+  // El nombre 'backend' solo funciona dentro de la red Docker, no desde el navegador
+  const getApiUrl = () => {
+    // Siempre usa localhost:8080 desde el navegador
+    // El puerto 8080 está mapeado desde el contenedor Docker al host
+    const apiUrl = 'http://localhost:8080';
+    return `${apiUrl}/example`;
+  };
+
   const fetchExample = async () => {
     if (!name.trim()) {
       error = 'Por favor ingresa un nombre';
@@ -15,7 +25,9 @@
     message = '';
 
     try {
-      const response = await fetch(`/example?name=${encodeURIComponent(name)}`);
+      const url = `${getApiUrl()}?name=${encodeURIComponent(name)}`;
+      console.log('🔍 Haciendo petición a:', url);
+      const response = await fetch(url);
       const data = await response.json();
 
       if (!response.ok) {
@@ -49,9 +61,9 @@
           type="text"
           bind:value={name}
           placeholder="Ingresa tu nombre..."
-          on:keydown={(e) => e.key === 'Enter' && fetchExample()}
+          on:keydown={e => e.key === 'Enter' && fetchExample()}
         />
-        
+
         {#if error}
           <div class="error-message">
             ⚠️ {error}
@@ -64,11 +76,7 @@
           </div>
         {/if}
 
-        <button 
-          on:click={fetchExample} 
-          disabled={loading || !name.trim()}
-          class="action-btn"
-        >
+        <button on:click={fetchExample} disabled={loading || !name.trim()} class="action-btn">
           {#if loading}
             <span class="spinner"></span> Cargando...
           {:else}
@@ -82,7 +90,11 @@
         <ul>
           <li>Edita <code>src/example.step.py</code> para crear tus propios Steps</li>
           <li>Modifica este componente en <code>frontend/src/App.svelte</code></li>
-          <li>Consulta la <a href="https://www.motia.dev/docs" target="_blank">documentación de Motia</a></li>
+          <li>
+            Consulta la <a href="https://www.motia.dev/docs" target="_blank"
+              >documentación de Motia</a
+            >
+          </li>
           <li>Lee <code>docs/ARCHITECTURE.md</code> para entender la estructura</li>
         </ul>
       </div>
@@ -176,7 +188,9 @@
     font-size: 18px;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
   }
 
   .action-btn:hover:not(:disabled) {
@@ -201,7 +215,9 @@
   }
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .info-section {

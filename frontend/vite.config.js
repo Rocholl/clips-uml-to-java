@@ -8,8 +8,12 @@ export default defineConfig({
     host: '0.0.0.0', // Permite acceso desde fuera del contenedor
     proxy: {
       '/example': {
+        // En Docker: usa el nombre del servicio 'backend' en el puerto 8080
+        // En local: usa localhost:8080
         target: process.env.VITE_API_URL || 'http://localhost:8080',
         changeOrigin: true,
+        secure: false,
+        ws: true, // Para WebSocket si es necesario
       },
     },
   },
